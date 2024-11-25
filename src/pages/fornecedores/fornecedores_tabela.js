@@ -19,39 +19,42 @@ const FornecedoresPage = () => {
   const router = useRouter();
 
   // função para buscar fornecedores do backend
-  const fetchFornecedores = async () => {
+  const fetchFornecedores = async (nome) => {
     try {
-      const response = await fetch('/api/fornecedores'); 
+      const queryParam = nome ? `?nome=${encodeURIComponent(nome)}` : '';
+      const response = await fetch(`/api/fornecedores${queryParam}`); //adiciona o nome como query string. 
+  
       if (!response.ok) {
         throw new Error('Erro ao buscar fornecedores');
       }
+  
       const data = await response.json();
-      setFornecedores(data);
+      setFornecedores(data); // aqui ele puxa os fornecedores do bd 
     } catch (error) {
       console.error(error.message);
     }
   };
-
-  // Função para excluir fornecedor
+  
+  // mudei aqui zé. 
   const deleteFornecedor = async (id) => {
     try {
-      const response = await fetch(`/api/fornecedores/${id}`, {
+      const response = await fetch(`/api/fornecedores?id=${id}`, {
         method: 'DELETE',
       });
       if (response.ok) {
         setFornecedores((prev) => prev.filter((fornecedor) => fornecedor.id !== id));
       } else {
-        throw new Error('Erro ao excluir fornecedor');
+        const errorData = await response.json();
+        console.error('Erro ao excluir fornecedor:', errorData.message || response.statusText);
       }
     } catch (error) {
-      console.error(error.message);
+      console.error('Erro ao excluir fornecedor:', error.message);
     }
   };
 
-
   useEffect(() => {
     fetchFornecedores();
-  }, []);
+  }, [])
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -67,7 +70,7 @@ const FornecedoresPage = () => {
   const filteredFornecedores = fornecedores.filter((fornecedor) => {
     return (
       (filters.nome && fornecedor.nome.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (filters.cnpjCpf && fornecedor.cnpjCpf.includes(searchTerm)) ||
+      (filters.cnpjCpf && fornecedor.cnpj.includes(searchTerm)) ||
       (filters.email && fornecedor.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (filters.telefone && fornecedor.telefone.includes(searchTerm))
     );
@@ -175,9 +178,9 @@ const FornecedoresPage = () => {
               </TableHead>
               <TableBody>
                 {filteredFornecedores.map((fornecedor) => (
-                  <TableRow key={fornecedor.id}>
+                  <TableRow key={fornecedor.id}>  
                     <TableCell>{fornecedor.nome}</TableCell>
-                    <TableCell>{fornecedor.cnpjCpf}</TableCell>
+                    <TableCell>{fornecedor.cnpj}</TableCell>
                     <TableCell>{fornecedor.email}</TableCell>
                     <TableCell>{fornecedor.telefone}</TableCell>
                     <TableCell>
