@@ -189,7 +189,6 @@ const FornecedoresPage = () => {
                   <TableCell><strong>CNPJ/CPF</strong></TableCell>
                   <TableCell><strong>Email</strong></TableCell>
                   <TableCell><strong>Telefone</strong></TableCell>
-                  <TableCell><strong>Ações</strong></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
