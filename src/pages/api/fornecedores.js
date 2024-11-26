@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BACKEND_URL = 'https://seu-backend-no-postman.com/api/fornecedores'; // substitui pela URL do  backend
+const BACKEND_URL = 'https://seu-backend-no-postman.com/api/fornecedoras'; // substitui pela URL do  backend
 
 async function handleGetRequest(res) {
   const response = await axios.get(BACKEND_URL);

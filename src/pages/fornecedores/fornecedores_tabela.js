@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Card, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, TextField, Checkbox, FormControlLabel, Button } from '@mui/material';
+import { Box, Card, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, TextField, Checkbox, FormControlLabel, Button, TablePagination } from '@mui/material';
 import Sidebar from '../../components/sidebar'; 
 import VisibilityIcon from '@mui/icons-material/Visibility'; 
 import DeleteIcon from '@mui/icons-material/Delete'; 
@@ -16,13 +16,15 @@ const FornecedoresPage = () => {
     telefone: true,
   });
   const [fornecedores, setFornecedores] = useState([]);
+  const [page, setPage] = useState(0);  // Estado para controlar a página atual
+  const [rowsPerPage, setRowsPerPage] = useState(5);  // Quantidade de itens por página
   const router = useRouter();
 
   // função para buscar fornecedores do backend
   const fetchFornecedores = async (nome) => {
     try {
       const queryParam = nome ? `?nome=${encodeURIComponent(nome)}` : '';
-      const response = await fetch(`/api/fornecedores${queryParam}`); //adiciona o nome como query string. 
+      const response = await fetch(`/api/fornecedores${queryParam}`);
   
       if (!response.ok) {
         throw new Error('Erro ao buscar fornecedores');
@@ -82,8 +84,22 @@ const FornecedoresPage = () => {
     }
   };
 
+  const handleEditNavigation = (id) => {
+    router.push(`./editar_fornecedores?id=${id}`);
+  };
+
   const handleNavigation = () => {
     router.push('./visualizar_fornecedor'); 
+  };
+
+  // Funções para controle de paginação
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);  // Resetar para a primeira página
   };
 
   return (
@@ -177,37 +193,50 @@ const FornecedoresPage = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filteredFornecedores.map((fornecedor) => (
-                  <TableRow key={fornecedor.id}>  
-                    <TableCell>{fornecedor.nome}</TableCell>
-                    <TableCell>{fornecedor.cnpj}</TableCell>
-                    <TableCell>{fornecedor.email}</TableCell>
-                    <TableCell>{fornecedor.telefone}</TableCell>
-                    <TableCell>
-                      <IconButton
-                        onClick={handleNavigation}
-                        sx={{ marginRight: 1, color: '#00509E' }} 
-                      >
-                        <VisibilityIcon />
-                      </IconButton>
-                      <IconButton 
-                        onClick={() => alert(`Editando: ${fornecedor.nome}`)} 
-                        sx={{ marginRight: 1, color: '#00509E' }}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton 
-                        onClick={() => deleteFornecedor(fornecedor.id)} 
-                        sx={{ color: '#00509E' }}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
+                {filteredFornecedores
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((fornecedor) => (
+                    <TableRow key={fornecedor.id}>  
+                      <TableCell>{fornecedor.nome}</TableCell>
+                      <TableCell>{fornecedor.cnpj}</TableCell>
+                      <TableCell>{fornecedor.email}</TableCell>
+                      <TableCell>{fornecedor.telefone}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={handleNavigation}
+                          sx={{ marginRight: 1, color: '#00509E' }} 
+                        >
+                          <VisibilityIcon />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => handleEditNavigation(fornecedor.id)}
+                          sx={{ marginRight: 1, color: '#00509E' }}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton 
+                          onClick={() => deleteFornecedor(fornecedor.id)} 
+                          sx={{ color: '#00509E' }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
+
+          {/* Adicionando a Paginação */}
+          <TablePagination
+            component="div"
+            count={filteredFornecedores.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            rowsPerPageOptions={[5, 10, 25]}
+          />
         </Card>
       </Box>
     </Box>
