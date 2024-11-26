@@ -12,9 +12,9 @@ const FornecedoresPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     nome: true,
-    cnpjCpf: true,
+    contato: true,
     email: true,
-    telefone: true,
+    chavePix: true,
   });
   const [fornecedores, setFornecedores] = useState([]);
   const [page, setPage] = useState(0);  // Estado para controlar a página atual
@@ -56,12 +56,12 @@ const FornecedoresPage = () => {
     });
   };
 
-  const filteredFornecedores = fornecedores.filter((fornecedor) => {
+  const filteredFornecedores = fornecedores.filter((fornecedora) => {
     return (
-      (filters.nome && fornecedor.nome.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (filters.cnpjCpf && fornecedor.cnpj.includes(searchTerm)) ||
-      (filters.email && fornecedor.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (filters.telefone && fornecedor.telefone.includes(searchTerm))
+      (filters.nome && fornecedora.nome.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (filters.contato && fornecedora.contato.includes(searchTerm)) ||
+      (filters.endereco && fornecedora.enedereco.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (filters.chavePix && fornecedora.chavePix.includes(searchTerm))
     );
   });
 

@@ -35,7 +35,6 @@ export default function FornecedoresCadastro() {
                 endereco: '',
                 chavePix: '',
                 contratoUrl: '',
-                enderecoCompleto: ''
             }); 
         } catch (error) {
             console.error('Erro ao criar fornecedor:', error);
