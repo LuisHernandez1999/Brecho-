@@ -6,7 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit'; 
 import SearchIcon from '@mui/icons-material/Search'; 
 import { useRouter } from 'next/router';
-import { getFornecedoras, deleteFornecedora } from '../../utils/api';
+import { getFornecedoras, deleteFornecedora } from '../api/fornecedores';
 
 const FornecedoresPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
