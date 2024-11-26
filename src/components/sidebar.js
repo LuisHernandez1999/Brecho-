@@ -42,7 +42,7 @@ export default function Sidebar() {
                         marginBottom: '1rem',
                         '&:hover': { backgroundColor: '#2A2A3E' },
                     }}
-                    onClick={() => handleNavigation('/Fornecedores')}
+                    onClick={() => handleNavigation('../../fornecedores/fornecedores_tabela')}
                 >
                     <ListItemIcon>
                         <FaUsers color="#000000" size={24} /> 

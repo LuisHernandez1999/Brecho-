@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Box, Button, Card, CardContent, Divider, TextField, Typography, Grid } from '@mui/material';
 import Sidebar from '../../components/sidebar';
+import { updateFornecedora } from '../api/fornecedores'; 
 
-export default function FornecedoresEdit({ fornecedorId }) { // recebe o `supplierId` como prop
+export default function FornecedoresEdit({ fornecedoraid }) {
     const [newValues, setNewValues] = useState({});
     const [loading, setLoading] = useState(true);
 
@@ -10,7 +11,7 @@ export default function FornecedoresEdit({ fornecedorId }) { // recebe o `suppli
     useEffect(() => {
         async function fetchFornecedorData() {
             try {
-                const response = await fetch(`/api/fornecedores/${fornecedorId}`); // rota para buscar os dados
+                const response = await fetch(`/api/fornecedores/${fornecedoraid}`);
                 if (!response.ok) throw new Error('Erro ao buscar dados do fornecedor');
                 const data = await response.json();
                 setNewValues(data);
@@ -21,7 +22,7 @@ export default function FornecedoresEdit({ fornecedorId }) { // recebe o `suppli
             }
         }
         fetchFornecedorData();
-    }, [fornecedorId]);
+    }, [fornecedoraid]);
 
     // atualiza o estado quando os campos são alterados
     const handleChange = (event) => {
@@ -33,19 +34,7 @@ export default function FornecedoresEdit({ fornecedorId }) { // recebe o `suppli
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch(`/api/fornecedores/${supplierId}`, { // rota de atualização
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newValues),
-            });
-
-            if (!response.ok) {
-                throw new Error('Erro ao atualizar fornecedor');
-            }
-
-            const data = await response.json();
+            const data = await updateFornecedora(fornecedoraid, newValues); // usando a função da API
             console.log('Fornecedor atualizado com sucesso:', data);
             alert('Fornecedor atualizado com sucesso!');
         } catch (error) {
@@ -57,6 +46,7 @@ export default function FornecedoresEdit({ fornecedorId }) { // recebe o `suppli
     if (loading) {
         return <Typography>Carregando dados do fornecedor...</Typography>;
     }
+
     return (
         <Box sx={{ display: 'flex' }}>
             <Box sx={{ width: '250px' }}>
@@ -101,86 +91,48 @@ export default function FornecedoresEdit({ fornecedorId }) { // recebe o `suppli
                                 <Grid item md={6} xs={12}>
                                     <TextField
                                         fullWidth
-                                        label="CNPJ/CPF"
-                                        name="documento"
+                                        label="Contato"
+                                        name="contato"
                                         onChange={handleChange}
                                         required
-                                        value={newValues?.documento || ''}
+                                        value={newValues?.contato || ''}
                                         variant="outlined"
                                     />
                                 </Grid>
                                 <Grid item md={6} xs={12}>
                                     <TextField
                                         fullWidth
-                                        label="E-mail"
-                                        name="email"
+                                        label="Endereço"
+                                        name="endereco"
                                         onChange={handleChange}
                                         required
-                                        value={newValues?.email || ''}
+                                        value={newValues?.endereco || ''}
                                         variant="outlined"
                                     />
                                 </Grid>
                                 <Grid item md={6} xs={12}>
                                     <TextField
                                         fullWidth
-                                        label="Telefone"
-                                        name="telefone"
+                                        label="Chave Pix"
+                                        name="chavePix"
                                         onChange={handleChange}
-                                        value={newValues?.telefone || ''}
+                                        value={newValues?.chavePix || ''}
+                                        variant="outlined"
+                                    />
+                                </Grid>
+                                <Grid item md={6} xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        label="URL do Contrato"
+                                        name="contratoUrl"
+                                        onChange={handleChange}
+                                        value={newValues?.contratoUrl || ''}
                                         variant="outlined"
                                     />
                                 </Grid>
                             </Grid>
-
-                            <Divider sx={{ my: 3 }} />
-
-                            <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
-                                Endereço
-                            </Typography>
                             <Grid container spacing={3}>
-                                <Grid item md={6} xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        label="CEP"
-                                        name="cep"
-                                        onChange={handleChange}
-                                        required
-                                        value={newValues?.cep || ''}
-                                        variant="outlined"
-                                    />
-                                </Grid>
-                                <Grid item md={6} xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        label="Logradouro"
-                                        name="logradouro"
-                                        onChange={handleChange}
-                                        required
-                                        value={newValues?.logradouro || ''}
-                                        variant="outlined"
-                                    />
-                                </Grid>
-                                <Grid item md={6} xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        label="Cidade"
-                                        name="cidade"
-                                        onChange={handleChange}
-                                        required
-                                        value={newValues?.cidade || ''}
-                                        variant="outlined"
-                                    />
-                                </Grid>
-                                <Grid item md={6} xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        label="Estado"
-                                        name="estado"
-                                        onChange={handleChange}
-                                        required
-                                        value={newValues?.estado || ''}
-                                        variant="outlined"
-                                    />
+                                <Grid item xs={12}>
                                 </Grid>
                             </Grid>
                         </CardContent>

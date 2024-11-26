@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import { Box, Card, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, TextField, Checkbox, FormControlLabel, Button, TablePagination } from '@mui/material';
 import Sidebar from '../../components/sidebar'; 
 import VisibilityIcon from '@mui/icons-material/Visibility'; 
@@ -6,6 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit'; 
 import SearchIcon from '@mui/icons-material/Search'; 
 import { useRouter } from 'next/router';
+import { getFornecedoras, deleteFornecedora } from '../../utils/api';
 
 const FornecedoresPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -20,35 +21,21 @@ const FornecedoresPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);  // Quantidade de itens por página
   const router = useRouter();
 
-  // função para buscar fornecedores do backend
-  const fetchFornecedores = async (nome) => {
+  // Função para buscar fornecedores da API
+  const fetchFornecedores = async () => {
     try {
-      const queryParam = nome ? `?nome=${encodeURIComponent(nome)}` : '';
-      const response = await fetch(`/api/fornecedores${queryParam}`);
-  
-      if (!response.ok) {
-        throw new Error('Erro ao buscar fornecedores');
-      }
-  
-      const data = await response.json();
-      setFornecedores(data); // aqui ele puxa os fornecedores do bd 
+      const data = await getFornecedoras();
+      setFornecedores(data);
     } catch (error) {
       console.error(error.message);
     }
   };
-  
-  // mudei aqui zé. 
-  const deleteFornecedor = async (id) => {
+
+  // Função para excluir fornecedor
+  const handleDeleteFornecedor = async (id) => {
     try {
-      const response = await fetch(`/api/fornecedores?id=${id}`, {
-        method: 'DELETE',
-      });
-      if (response.ok) {
-        setFornecedores((prev) => prev.filter((fornecedor) => fornecedor.id !== id));
-      } else {
-        const errorData = await response.json();
-        console.error('Erro ao excluir fornecedor:', errorData.message || response.statusText);
-      }
+      await deleteFornecedora(id);
+      setFornecedores((prev) => prev.filter((fornecedor) => fornecedor.id !== id));
     } catch (error) {
       console.error('Erro ao excluir fornecedor:', error.message);
     }
@@ -56,7 +43,7 @@ const FornecedoresPage = () => {
 
   useEffect(() => {
     fetchFornecedores();
-  }, [])
+  }, []);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -186,9 +173,9 @@ const FornecedoresPage = () => {
               <TableHead>
                 <TableRow>
                   <TableCell><strong>Nome</strong></TableCell>
-                  <TableCell><strong>CNPJ/CPF</strong></TableCell>
-                  <TableCell><strong>Email</strong></TableCell>
-                  <TableCell><strong>Telefone</strong></TableCell>
+                  <TableCell><strong>Contato</strong></TableCell>
+                  <TableCell><strong>Endereço</strong></TableCell>
+                  <TableCell><strong>Chave Pix </strong></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -197,9 +184,9 @@ const FornecedoresPage = () => {
                   .map((fornecedor) => (
                     <TableRow key={fornecedor.id}>  
                       <TableCell>{fornecedor.nome}</TableCell>
-                      <TableCell>{fornecedor.cnpj}</TableCell>
-                      <TableCell>{fornecedor.email}</TableCell>
-                      <TableCell>{fornecedor.telefone}</TableCell>
+                      <TableCell>{fornecedor.contato}</TableCell>
+                      <TableCell>{fornecedor.endereco}</TableCell>
+                      <TableCell>{fornecedor.chavePix}</TableCell>
                       <TableCell>
                         <IconButton
                           onClick={handleNavigation}
@@ -214,7 +201,7 @@ const FornecedoresPage = () => {
                           <EditIcon />
                         </IconButton>
                         <IconButton 
-                          onClick={() => deleteFornecedor(fornecedor.id)} 
+                          onClick={() => handleDeleteFornecedor(fornecedor.id)} 
                           sx={{ color: '#00509E' }}
                         >
                           <DeleteIcon />

@@ -1,27 +1,30 @@
 import { useState, useEffect } from 'react';
-import { Box, Card, CardContent, Divider, Typography, Grid, CircularProgress } from '@mui/material';
+import { Box, Card, CardContent, Divider, Typography, Grid, CircularProgress, Link } from '@mui/material';
 import Sidebar from '../../components/sidebar'; 
 import { useRouter } from 'next/router';
+import { getFornecedoras } from '../api/fornecedores'; 
 
 export default function SupplierRegistration() {
     const [newValues, setNewValues] = useState(null); 
     const [isLoading, setIsLoading] = useState(true); 
     const router = useRouter();
-    const { id } = router.query; // id do fornecedor obtido pela URL
+    const { id } = router.query; // id da fornecedora obtido pela URL
 
     useEffect(() => {
-        if (id) {
-            fetch(`/api/fornecedores/${id}`)
-                .then((response) => response.json())
-                .then((data) => {
-                    setNewValues(data); // atualiza com os dados do backend
-                    setIsLoading(false);
-                })
-                .catch((error) => {
+        const fetchFornecedor = async () => {
+            if (id) {
+                try {
+                    const data = await getFornecedoras(id); // busca fornecedora pelo ID
+                    setNewValues(data);
+                } catch (error) {
                     console.error("Erro ao buscar fornecedor:", error);
+                } finally {
                     setIsLoading(false);
-                });
-        }
+                }
+            }
+        };
+
+        fetchFornecedor();
     }, [id]);
 
     if (isLoading) {
@@ -74,50 +77,25 @@ export default function SupplierRegistration() {
                             </Grid>
                             <Grid item md={6} xs={12}>
                                 <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                                    CNPJ/CPF
+                                    Contato
                                 </Typography>
-                                <Typography variant="body2">{newValues.cnpjCpf}</Typography>
+                                <Typography variant="body2">{newValues.contato}</Typography>
+                            </Grid>
+                            <Grid item md={6} xs={12}>
                             </Grid>
                             <Grid item md={6} xs={12}>
                                 <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                                    E-mail
+                                    Chave Pix
                                 </Typography>
-                                <Typography variant="body2">{newValues.email}</Typography>
+                                <Typography variant="body2">{newValues.chavePix}</Typography>
                             </Grid>
                             <Grid item md={6} xs={12}>
                                 <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                                    Telefone
+                                    Contrato
                                 </Typography>
-                                <Typography variant="body2">{newValues.telefone}</Typography>
-                            </Grid>
-                        </Grid>
-
-                        <Divider sx={{ my: 3 }} />
-
-                        <Grid container spacing={3}>
-                            <Grid item md={6} xs={12}>
-                                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                                    CEP
-                                </Typography>
-                                <Typography variant="body2">{newValues.cep}</Typography>
-                            </Grid>
-                            <Grid item md={6} xs={12}>
-                                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                                    Logradouro
-                                </Typography>
-                                <Typography variant="body2">{newValues.logradouro}</Typography>
-                            </Grid>
-                            <Grid item md={6} xs={12}>
-                                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                                    Cidade
-                                </Typography>
-                                <Typography variant="body2">{newValues.cidade}</Typography>
-                            </Grid>
-                            <Grid item md={6} xs={12}>
-                                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                                    Estado
-                                </Typography>
-                                <Typography variant="body2">{newValues.estado}</Typography>
+                                <Link href={newValues.contratoUrl} target="_blank" rel="noopener">
+                                    Visualizar Contrato
+                                </Link>
                             </Grid>
                         </Grid>
                     </CardContent>
