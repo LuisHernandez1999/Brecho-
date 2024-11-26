@@ -181,12 +181,12 @@ const FornecedoresPage = () => {
               <TableBody>
                 {filteredFornecedores
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((fornecedor) => (
-                    <TableRow key={fornecedor.id}>  
-                      <TableCell>{fornecedor.nome}</TableCell>
-                      <TableCell>{fornecedor.contato}</TableCell>
-                      <TableCell>{fornecedor.endereco}</TableCell>
-                      <TableCell>{fornecedor.chavePix}</TableCell>
+                  .map((fornecedora) => (
+                    <TableRow key={fornecedora.id}>  
+                      <TableCell>{fornecedora.nome}</TableCell>
+                      <TableCell>{fornecedora.contato}</TableCell>
+                      <TableCell>{fornecedora.endereco}</TableCell>
+                      <TableCell>{fornecedora.chavePix}</TableCell>
                       <TableCell>
                         <IconButton
                           onClick={handleNavigation}
