@@ -1,44 +1,49 @@
 import { useState, useEffect } from 'react';
-import { Box, Button, Card, CardContent, Divider, TextField, Typography, Grid } from '@mui/material';
+import { Box, Button, Card, CardContent, TextField, Typography, Grid } from '@mui/material';
 import Sidebar from '../../components/sidebar';
-import { updateFornecedora } from '../api/fornecedores'; 
+import axios from 'axios';
+
+const BASE_URL = 'http://localhost:8080/api/fornecedoras'; 
 
 export default function FornecedoresEdit({ fornecedoraid }) {
     const [newValues, setNewValues] = useState({});
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // função para carregar os dados do fornecedor
+    // carregar os dados do fornecedor
     useEffect(() => {
         async function fetchFornecedorData() {
             try {
-                const response = await fetch(`/api/fornecedores/${fornecedoraid}`);
-                if (!response.ok) throw new Error('Erro ao buscar dados do fornecedor');
-                const data = await response.json();
-                setNewValues(data);
+                const response = await axios.get(`${BASE_URL}/${fornecedoraid}`);
+                setNewValues(response.data);
                 setLoading(false);
             } catch (error) {
                 console.error('Erro ao carregar fornecedor:', error);
+                setError('Erro ao carregar os dados do fornecedor');
                 setLoading(false);
             }
         }
         fetchFornecedorData();
     }, [fornecedoraid]);
 
-    // atualiza o estado quando os campos são alterados
+    // Atualiza o estado quando os campos são alterados
     const handleChange = (event) => {
         const { name, value } = event.target;
         setNewValues((prev) => ({ ...prev, [name]: value }));
     };
 
-    // envia os dados atualizados
+
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setError(null); 
+
         try {
-            const data = await updateFornecedora(fornecedoraid, newValues); // usando a função da API
-            console.log('Fornecedor atualizado com sucesso:', data);
+            const response = await axios.put(`${BASE_URL}/${fornecedoraid}`, newValues); 
+            console.log('Fornecedor atualizado com sucesso:', response.data);
             alert('Fornecedor atualizado com sucesso!');
         } catch (error) {
-            console.error('Erro:', error);
+            console.error('Erro ao atualizar fornecedor:', error);
+            setError('Erro ao atualizar fornecedor');
             alert('Erro ao atualizar fornecedor.');
         }
     };
@@ -61,17 +66,7 @@ export default function FornecedoresEdit({ fornecedoraid }) {
                 </Box>
 
                 <form autoComplete="off" onSubmit={handleSubmit}>
-                    <Card
-                        sx={{
-                            borderRadius: 4,
-                            boxShadow: 3,
-                            p: 3,
-                            maxWidth: '100%',
-                            mx: 'auto',
-                            mt: 8,
-                            height: 'auto',
-                        }}
-                    >
+                    <Card sx={{ borderRadius: 4, boxShadow: 3, p: 3, maxWidth: '100%', mx: 'auto', mt: 8, height: 'auto' }}>
                         <CardContent>
                             <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
                                 Informações Gerais
@@ -129,10 +124,6 @@ export default function FornecedoresEdit({ fornecedoraid }) {
                                         value={newValues?.contratoUrl || ''}
                                         variant="outlined"
                                     />
-                                </Grid>
-                            </Grid>
-                            <Grid container spacing={3}>
-                                <Grid item xs={12}>
                                 </Grid>
                             </Grid>
                         </CardContent>

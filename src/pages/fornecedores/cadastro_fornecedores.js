@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { Box, Button, Card, CardContent, Divider, TextField, Typography, Grid } from '@mui/material';
+import { Box, Button, Card, CardContent, TextField, Typography, Grid, CircularProgress } from '@mui/material';
 import Sidebar from '../../components/sidebar';
-import { createFornecedora } from '../api/fornecedores'; 
+import axios from 'axios';
+
+const BASE_URL = 'http://localhost:8080/api/fornecedoras'; // URL base da API
 
 export default function FornecedoresCadastro() {
     const [newValues, setNewValues] = useState({
@@ -10,23 +12,33 @@ export default function FornecedoresCadastro() {
         endereco: '',
         chavePix: '',
         contratoUrl: '',
-        enderecoCompleto: ''
     });
 
     const [loading, setLoading] = useState(false);
 
-    // atualiza o estado quando os campos são alterados
+    // Atualiza o estado com os valores dos campos
     const handleChange = (event) => {
         const { name, value } = event.target;
         setNewValues((prev) => ({ ...prev, [name]: value }));
     };
 
-    // envia os dados para criar o fornecedor
+    // Função para criar um fornecedor na API
+    const createFornecedora = async (values) => {
+        try {
+            const response = await axios.post(BASE_URL, values); // Envia os dados para a API
+            return response.data;
+        } catch (error) {
+            console.error('Erro ao criar fornecedor:', error);
+            throw error;
+        }
+    };
+
+    // Envia os dados para a API
     const handleSubmit = async (event) => {
         event.preventDefault();
         setLoading(true);
         try {
-            const data = await createFornecedora(newValues); // usando a função para criar fornecedor
+            const data = await createFornecedora(newValues); // Cria o fornecedor na API
             console.log('Fornecedor criado com sucesso:', data);
             alert('Fornecedor criado com sucesso!');
             setNewValues({
@@ -35,7 +47,7 @@ export default function FornecedoresCadastro() {
                 endereco: '',
                 chavePix: '',
                 contratoUrl: '',
-            }); 
+            });
         } catch (error) {
             console.error('Erro ao criar fornecedor:', error);
             alert('Erro ao criar fornecedor.');
@@ -128,10 +140,6 @@ export default function FornecedoresCadastro() {
                                     />
                                 </Grid>
                             </Grid>
-                            <Grid container spacing={3}>
-                                <Grid item xs={12}>
-                                </Grid>
-                            </Grid>
                         </CardContent>
 
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 2 }}>
@@ -150,7 +158,11 @@ export default function FornecedoresCadastro() {
                                     },
                                 }}
                             >
-                                {loading ? 'Cadastrando...' : 'Salvar'}
+                                {loading ? (
+                                    <CircularProgress size={24} sx={{ marginRight: 2 }} />
+                                ) : (
+                                    'Salvar'
+                                )}
                             </Button>
                         </Box>
                     </Card>

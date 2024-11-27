@@ -1,23 +1,24 @@
 import { useState, useEffect } from 'react';
 import { Box, Card, CardContent, Divider, Typography, Grid, CircularProgress, Link } from '@mui/material';
-import Sidebar from '../../components/sidebar'; 
+import Sidebar from '../../components/sidebar';
 import { useRouter } from 'next/router';
-import { getFornecedoras } from '../api/fornecedores'; 
+import axios from 'axios';
 
-export default function SupplierRegistration() {
-    const [newValues, setNewValues] = useState(null); 
-    const [isLoading, setIsLoading] = useState(true); 
+const BASE_URL = 'http://localhost:8080/api/fornecedoras'; // URL base da API
+
+export default function SupplierDetails() {
+    const [newValues, setNewValues] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
-    const { id } = router.query; // id da fornecedora obtido pela URL
-
+    const { id } = router.query; // ID da fornecedora obtido pela URL
     useEffect(() => {
         const fetchFornecedor = async () => {
             if (id) {
                 try {
-                    const data = await getFornecedoras(id); // busca fornecedora pelo ID
-                    setNewValues(data);
+                    const response = await axios.get(`${BASE_URL}/${id}`); // Busca fornecedora pelo ID
+                    setNewValues(response.data);
                 } catch (error) {
-                    console.error("Erro ao buscar fornecedor:", error);
+                    console.error('Erro ao buscar fornecedor:', error.message);
                 } finally {
                     setIsLoading(false);
                 }
@@ -82,6 +83,10 @@ export default function SupplierRegistration() {
                                 <Typography variant="body2">{newValues.contato}</Typography>
                             </Grid>
                             <Grid item md={6} xs={12}>
+                                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                                    Endereço
+                                </Typography>
+                                <Typography variant="body2">{newValues.endereco}</Typography>
                             </Grid>
                             <Grid item md={6} xs={12}>
                                 <Typography variant="body1" sx={{ fontWeight: 'bold' }}>

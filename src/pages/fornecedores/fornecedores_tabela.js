@@ -1,12 +1,30 @@
-import React, { useState, useEffect } from 'react'; 
-import { Box, Card, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, TextField, Checkbox, FormControlLabel, Button, TablePagination } from '@mui/material';
-import Sidebar from '../../components/sidebar'; 
-import VisibilityIcon from '@mui/icons-material/Visibility'; 
-import DeleteIcon from '@mui/icons-material/Delete'; 
-import EditIcon from '@mui/icons-material/Edit'; 
-import SearchIcon from '@mui/icons-material/Search'; 
+import React, { useState, useEffect } from 'react';
+import {
+  Box,
+  Card,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  IconButton,
+  TextField,
+  Checkbox,
+  FormControlLabel,
+  Button,
+  TablePagination,
+} from '@mui/material';
+import Sidebar from '../../components/sidebar';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import SearchIcon from '@mui/icons-material/Search';
+import axios from 'axios';
 import { useRouter } from 'next/router';
-import { getFornecedoras, deleteFornecedora } from '../api/fornecedores';
+
+const BASE_URL = 'http://localhost:8080/api/fornecedoras';
 
 const FornecedoresPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,33 +35,32 @@ const FornecedoresPage = () => {
     chavePix: true,
   });
   const [fornecedores, setFornecedores] = useState([]);
-  const [page, setPage] = useState(0);  // Estado para controlar a página atual
-  const [rowsPerPage, setRowsPerPage] = useState(5);  // Quantidade de itens por página
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const router = useRouter();
 
-  // Função para buscar fornecedores da API
-  const fetchFornecedores = async () => {
-    try {
-      const data = await getFornecedoras();
-      setFornecedores(data);
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
+  // Fetch fornecedores da API
+  useEffect(() => {
+    const fetchFornecedores = async () => {
+      try {
+        const response = await axios.get(BASE_URL);
+        setFornecedores(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar fornecedores:', error.message);
+      }
+    };
+    fetchFornecedores();
+  }, []);
 
-  // Função para excluir fornecedor
+  // Excluir fornecedor
   const handleDeleteFornecedor = async (id) => {
     try {
-      await deleteFornecedora(id);
+      await axios.delete(`${BASE_URL}?id=${id}`);
       setFornecedores((prev) => prev.filter((fornecedor) => fornecedor.id !== id));
     } catch (error) {
       console.error('Erro ao excluir fornecedor:', error.message);
     }
   };
-
-  useEffect(() => {
-    fetchFornecedores();
-  }, []);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -60,7 +77,7 @@ const FornecedoresPage = () => {
     return (
       (filters.nome && fornecedora.nome.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (filters.contato && fornecedora.contato.includes(searchTerm)) ||
-      (filters.endereco && fornecedora.enedereco.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (filters.endereco && fornecedora.endereco.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (filters.chavePix && fornecedora.chavePix.includes(searchTerm))
     );
   });
@@ -76,17 +93,16 @@ const FornecedoresPage = () => {
   };
 
   const handleNavigation = () => {
-    router.push('./visualizar_fornecedor'); 
+    router.push('./visualizar_fornecedor');
   };
 
-  // Funções para controle de paginação
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);  // Resetar para a primeira página
+    setPage(0);
   };
 
   return (
@@ -95,11 +111,11 @@ const FornecedoresPage = () => {
       <Box
         sx={{
           flex: 1,
-          marginLeft: '250px', 
+          marginLeft: '250px',
           padding: '20px',
           height: '100vh',
           overflow: 'auto',
-          marginTop: '60px', 
+          marginTop: '60px',
         }}
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -117,7 +133,7 @@ const FornecedoresPage = () => {
                 backgroundColor: '#003b6e',
               },
             }}
-            onClick={handleNavigateToRegister} 
+            onClick={handleNavigateToRegister}
           >
             Adicionar
           </Button>
@@ -132,13 +148,13 @@ const FornecedoresPage = () => {
           sx={{
             marginBottom: '20px',
             '& .MuiOutlinedInput-root': {
-              borderRadius: '25px', 
+              borderRadius: '25px',
               borderColor: '#00509E',
               '&:hover fieldset': {
-                borderColor: '#003b6e', 
+                borderColor: '#003b6e',
               },
               '&.Mui-focused fieldset': {
-                borderColor: '#00509E', 
+                borderColor: '#00509E',
               },
             },
           }}
@@ -182,7 +198,7 @@ const FornecedoresPage = () => {
                 {filteredFornecedores
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((fornecedora) => (
-                    <TableRow key={fornecedora.id}>  
+                    <TableRow key={fornecedora.id}>
                       <TableCell>{fornecedora.nome}</TableCell>
                       <TableCell>{fornecedora.contato}</TableCell>
                       <TableCell>{fornecedora.endereco}</TableCell>
@@ -190,18 +206,18 @@ const FornecedoresPage = () => {
                       <TableCell>
                         <IconButton
                           onClick={handleNavigation}
-                          sx={{ marginRight: 1, color: '#00509E' }} 
+                          sx={{ marginRight: 1, color: '#00509E' }}
                         >
                           <VisibilityIcon />
                         </IconButton>
                         <IconButton
-                          onClick={() => handleEditNavigation(fornecedor.id)}
+                          onClick={() => handleEditNavigation(fornecedora.id)}
                           sx={{ marginRight: 1, color: '#00509E' }}
                         >
                           <EditIcon />
                         </IconButton>
-                        <IconButton 
-                          onClick={() => handleDeleteFornecedor(fornecedor.id)} 
+                        <IconButton
+                          onClick={() => handleDeleteFornecedor(fornecedora.id)}
                           sx={{ color: '#00509E' }}
                         >
                           <DeleteIcon />
@@ -213,7 +229,6 @@ const FornecedoresPage = () => {
             </Table>
           </TableContainer>
 
-          {/* Adicionando a Paginação */}
           <TablePagination
             component="div"
             count={filteredFornecedores.length}
