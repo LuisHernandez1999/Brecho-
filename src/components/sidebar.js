@@ -57,7 +57,7 @@ export default function Sidebar() {
                         marginBottom: '1rem',
                         '&:hover': { backgroundColor: '#2A2A3E' },
                     }}
-                    onClick={() => handleNavigation('/Estoque')}
+                    onClick={() => handleNavigation('../../estoque/estoque_tabela')}
                 >
                     <ListItemIcon>
                         <FaBox color="#000000" size={24} /> 
