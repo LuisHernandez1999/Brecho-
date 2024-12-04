@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8080/api/produtos'; // URL base para produtos
+const BASE_URL = 'http://localhost:8080/api/produtos'; // url base para produtos
 
 export default async function handler(req, res) {
   const { method, body, query } = req;
