@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Card,
@@ -19,15 +19,17 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const EstoquePage = () => {
-  const [produtos, setProdutos] = useState([
-    { id: 1, imagem: '/camiseta.jpg', nome: 'Camiseta Infantil', quantidade: 10, preco: 25.0 },
-    { id: 2, imagem: '/sapato.jpg', nome: 'Sapato Infantil', quantidade: 5, preco: 50.0 },
-    { id: 3, imagem: '/calca.jpg', nome: 'Calça Infantil', quantidade: 8, preco: 35.0 },
-  ]);
+  const [produtos, setProdutos] = useState([ ]);
+
+  const BASE_URL = 'http://localhost:8080/api/produtos';// url da api 
+
 
   const [page, setPage] = useState(0);
+  const [quantidadeExibida, setQuantidadeExibida] = useState(0); 
+  const [valorExibido, setValorExibido] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [search, setSearch] = useState('');
   const router = useRouter();
@@ -38,18 +40,47 @@ const EstoquePage = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const handleDeleteProduto = (id) => setProdutos((prev) => prev.filter((produto) => produto.id !== id));
+  useEffect(() => {
+    const fetchProdutos = async () => {
+      try {
+        const response = await axios.get(BASE_URL);
+        setProdutos(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error.message);
+      }
+    };
+    fetchProdutos();
+  }, []);
+
+  // função para excluir um produto
+  const handleDeleteProduto = async (id) => {
+    try {
+      await axios.delete(`${BASE_URL}?id=${id}`);
+      setProdutos((prev) => prev.filter((produto) => produto.id !== id));
+    } catch (error) {
+      console.error('Erro ao excluir produto:', error.message);
+    }
+  };
+
   
 
   const handleNavigateToRegister = () => {
     if (router) {
-      router.push('./cadastro_fornecedores');
+      router.push('./cadastro_produto');
     }
   };
-  const quantidadeExibida = produtos.reduce((acc, p) => acc + p.quantidade, 0);
-  const valorExibido = produtos.reduce((acc, p) => acc + p.quantidade * p.preco, 0);
+  useEffect(() => {
+    if (produtos.length > 0) {
+        // calcula a quantidade total e o valor total  dos produtos
+        const quantidade = produtos.reduce((acc, p) => acc + p.quantidade, 0);
+        const valor = produtos.reduce((acc, p) => acc + p.quantidade * p.preco, 0);
 
-  // Filtrar produtos pelo campo de pesquisa
+        setQuantidadeExibida(quantidade);
+        setValorExibido(valor);
+    }
+}, [produtos]);
+
+  // filtra os  produtos pelo campo de pesquisa
   const produtosFiltrados = produtos.filter((produto) =>
     produto.nome.toLowerCase().includes(search.toLowerCase())
   );
@@ -118,11 +149,10 @@ const EstoquePage = () => {
             </Typography>
           </Card>
         </Box>
-        <Card sx={{ padding: '20px', bgcolor: 'white', boxShadow: 3, marginTop: '30px',  borderRadius: '25px',}}>
-        <TableContainer sx={{ maxHeight: '1000px' }}>
+        <Card sx={{ padding: '10px', bgcolor: 'white', boxShadow: 3, marginTop: '10px',  borderRadius: '25px',}}>
+        <TableContainer sx={{ maxHeight: '600px' }}>
   <Table stickyHeader>
     <TableHead>
-      {/* Linha do campo de pesquisa */}
       <TableRow>
         <TableCell colSpan={6} align="left">
           <TextField
@@ -132,32 +162,32 @@ const EstoquePage = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             sx={{
-              width: '800px', // Aumenta a largura
-              height: '50px', // Aumenta a altura
+              width: '800px', 
+              height: '30px', 
               '& .MuiOutlinedInput-root': {
-                borderRadius: '25px', // Arredonda as bordas
+                borderRadius: '25px', 
                 '& fieldset': {
-                  borderColor: '#00509E', // Cor das bordas
-                  borderWidth: '2px', // Espessura das bordas
+                  borderColor: '#00509E', 
+                  borderWidth: '2px',
                 },
                 '&:hover fieldset': {
-                  borderColor: '#00509E', // Cor ao passar o mouse
+                  borderColor: '#00509E', 
                 },
                 '&.Mui-focused fieldset': {
-                  borderColor: '#00509E', // Cor ao focar
+                  borderColor: '#00509E', 
                 },
               },
             }}
           />
-          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end',marginTop: '-50px'  }}>
+          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end',marginTop: '-20px'  }}>
     <Button
       sx={{
         backgroundColor: '#00509E',
         color: 'white',
         borderRadius: '30px',
-        height: '50px',
+        height: '40px',
         padding: '8px 20px',
-         marginBottom: '50px',
+        marginBottom: '10px',
         textTransform: 'none',
         '&:hover': {
           backgroundColor: '#003b6e',
@@ -170,7 +200,6 @@ const EstoquePage = () => {
   </Box>
         </TableCell>
       </TableRow>
-      {/* Cabeçalho da tabela */}
       <TableRow>
         <TableCell><strong>Imagem</strong></TableCell>
         <TableCell><strong>Nome</strong></TableCell>
