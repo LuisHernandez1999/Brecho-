@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import {
   Box,
   Card,
@@ -11,12 +11,14 @@ import {
   TableRow,
   IconButton,
   TablePagination,
+  TextField,
+  Button,
 } from '@mui/material';
 import Sidebar from '../../components/sidebar';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-
+import { useRouter } from 'next/router';
 
 const EstoquePage = () => {
   const [produtos, setProdutos] = useState([
@@ -27,6 +29,9 @@ const EstoquePage = () => {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [search, setSearch] = useState('');
+  const router = useRouter();
+  
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
@@ -34,9 +39,20 @@ const EstoquePage = () => {
     setPage(0);
   };
   const handleDeleteProduto = (id) => setProdutos((prev) => prev.filter((produto) => produto.id !== id));
+  
 
+  const handleNavigateToRegister = () => {
+    if (router) {
+      router.push('./cadastro_fornecedores');
+    }
+  };
   const quantidadeExibida = produtos.reduce((acc, p) => acc + p.quantidade, 0);
   const valorExibido = produtos.reduce((acc, p) => acc + p.quantidade * p.preco, 0);
+
+  // Filtrar produtos pelo campo de pesquisa
+  const produtosFiltrados = produtos.filter((produto) =>
+    produto.nome.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -102,59 +118,106 @@ const EstoquePage = () => {
             </Typography>
           </Card>
         </Box>
-
-        <Card sx={{ padding: '20px', bgcolor: 'white', boxShadow: 3,  marginTop: '60px', }}>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell><strong>Imagem</strong></TableCell>
-                  <TableCell><strong>Nome</strong></TableCell>
-                  <TableCell><strong>Quantidade</strong></TableCell>
-                  <TableCell><strong>Preço/Unidade</strong></TableCell>
-                  <TableCell><strong>Valor Total</strong></TableCell>
-                  <TableCell><strong>Ações</strong></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {produtos
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((produto) => (
-                    <TableRow key={produto.id}>
-                      <TableCell>
-                        <img
-                          src={produto.imagem}
-                          alt={produto.nome}
-                          style={{ width: '50px', height: '50px', borderRadius: '5px' }}
-                        />
-                      </TableCell>
-                      <TableCell>{produto.nome}</TableCell>
-                      <TableCell>{produto.quantidade}</TableCell>
-                      <TableCell>R$ {produto.preco.toFixed(2)}</TableCell>
-                      <TableCell>R$ {(produto.quantidade * produto.preco).toFixed(2)}</TableCell>
-                      <TableCell>
-                      <IconButton sx={{ marginRight: 1, color: '#00509E' }}>
-                         <VisibilityIcon />
-                         </IconButton>
-                        <IconButton sx={{ marginRight: 1, color: '#00509E' }}>
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          onClick={() => handleDeleteProduto(produto.id)}
-                          sx={{ color: '#00509E' }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-
+        <Card sx={{ padding: '20px', bgcolor: 'white', boxShadow: 3, marginTop: '30px',  borderRadius: '25px',}}>
+        <TableContainer sx={{ maxHeight: '1000px' }}>
+  <Table stickyHeader>
+    <TableHead>
+      {/* Linha do campo de pesquisa */}
+      <TableRow>
+        <TableCell colSpan={6} align="left">
+          <TextField
+            label="Pesquisar produto"
+            variant="outlined"
+            size="small"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            sx={{
+              width: '800px', // Aumenta a largura
+              height: '50px', // Aumenta a altura
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '25px', // Arredonda as bordas
+                '& fieldset': {
+                  borderColor: '#00509E', // Cor das bordas
+                  borderWidth: '2px', // Espessura das bordas
+                },
+                '&:hover fieldset': {
+                  borderColor: '#00509E', // Cor ao passar o mouse
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#00509E', // Cor ao focar
+                },
+              },
+            }}
+          />
+          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end',marginTop: '-50px'  }}>
+    <Button
+      sx={{
+        backgroundColor: '#00509E',
+        color: 'white',
+        borderRadius: '30px',
+        height: '50px',
+        padding: '8px 20px',
+         marginBottom: '50px',
+        textTransform: 'none',
+        '&:hover': {
+          backgroundColor: '#003b6e',
+        },
+      }}
+      onClick={handleNavigateToRegister}
+    >
+      Adicionar
+    </Button>
+  </Box>
+        </TableCell>
+      </TableRow>
+      {/* Cabeçalho da tabela */}
+      <TableRow>
+        <TableCell><strong>Imagem</strong></TableCell>
+        <TableCell><strong>Nome</strong></TableCell>
+        <TableCell><strong>Quantidade</strong></TableCell>
+        <TableCell><strong>Preço/Unidade</strong></TableCell>
+        <TableCell><strong>Valor Total</strong></TableCell>
+        <TableCell><strong>Ações</strong></TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {produtosFiltrados
+        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+        .map((produto) => (
+          <TableRow key={produto.id}>
+            <TableCell>
+              <img
+                src={produto.imagem}
+                alt={produto.nome}
+                style={{ width: '50px', height: '50px', borderRadius: '5px' }}
+              />
+            </TableCell>
+            <TableCell>{produto.nome}</TableCell>
+            <TableCell>{produto.quantidade}</TableCell>
+            <TableCell>R$ {produto.preco.toFixed(2)}</TableCell>
+            <TableCell>R$ {(produto.quantidade * produto.preco).toFixed(2)}</TableCell>
+            <TableCell>
+              <IconButton sx={{ marginRight: 1, color: '#00509E' }}>
+                <VisibilityIcon />
+              </IconButton>
+              <IconButton sx={{ marginRight: 1, color: '#00509E' }}>
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                onClick={() => handleDeleteProduto(produto.id)}
+                sx={{ color: '#00509E' }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </TableCell>
+          </TableRow>
+        ))}
+    </TableBody>
+  </Table>
+</TableContainer>
           <TablePagination
             component="div"
-            count={produtos.length}
+            count={produtosFiltrados.length}
             page={page}
             onPageChange={handleChangePage}
             rowsPerPage={rowsPerPage}

@@ -11,8 +11,6 @@ import {
   TableRow,
   IconButton,
   TextField,
-  Checkbox,
-  FormControlLabel,
   Button,
   TablePagination,
 } from '@mui/material';
@@ -20,7 +18,6 @@ import Sidebar from '../../components/sidebar';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
@@ -28,18 +25,12 @@ const BASE_URL = 'http://localhost:8080/api/fornecedoras';
 
 const FornecedoresPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filters, setFilters] = useState({
-    nome: true,
-    contato: true,
-    email: true,
-    chavePix: true,
-  });
   const [fornecedores, setFornecedores] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [search, setSearch] = useState('');
   const router = useRouter();
 
-  // Fetch fornecedores da API
   useEffect(() => {
     const fetchFornecedores = async () => {
       try {
@@ -52,7 +43,6 @@ const FornecedoresPage = () => {
     fetchFornecedores();
   }, []);
 
-  // Excluir fornecedor
   const handleDeleteFornecedor = async (id) => {
     try {
       await axios.delete(`${BASE_URL}?id=${id}`);
@@ -65,22 +55,6 @@ const FornecedoresPage = () => {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
-
-  const handleFilterChange = (event) => {
-    setFilters({
-      ...filters,
-      [event.target.name]: event.target.checked,
-    });
-  };
-
-  const filteredFornecedores = fornecedores.filter((fornecedora) => {
-    return (
-      (filters.nome && fornecedora.nome.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (filters.contato && fornecedora.contato.includes(searchTerm)) ||
-      (filters.endereco && fornecedora.endereco.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (filters.chavePix && fornecedora.chavePix.includes(searchTerm))
-    );
-  });
 
   const handleNavigateToRegister = () => {
     if (router) {
@@ -105,6 +79,10 @@ const FornecedoresPage = () => {
     setPage(0);
   };
 
+  const filteredFornecedores = fornecedores.filter((fornecedora) => {
+    return fornecedora.nome.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
   return (
     <Box sx={{ display: 'flex' }}>
       <Sidebar />
@@ -113,85 +91,81 @@ const FornecedoresPage = () => {
           flex: 1,
           marginLeft: '250px',
           padding: '20px',
-          height: '100vh',
+          maxHeight: '1000px', 
           overflow: 'auto',
           marginTop: '60px',
         }}
       >
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="h4" sx={{ marginBottom: '60px', fontWeight: 'bold' }}>
-            Fornecedores
-          </Typography>
-          <Button
-            sx={{
-              backgroundColor: '#00509E',
-              color: 'white',
-              borderRadius: '30px',
-              padding: '8px 20px',
-              textTransform: 'none',
-              '&:hover': {
-                backgroundColor: '#003b6e',
-              },
-            }}
-            onClick={handleNavigateToRegister}
-          >
-            Adicionar
-          </Button>
-        </Box>
-
-        <TextField
-          value={searchTerm}
-          onChange={handleSearch}
-          label="Pesquisar Fornecedor"
-          variant="outlined"
-          fullWidth
+        <Typography variant="h4" sx={{ marginBottom: '20px', fontWeight: 'bold' }}>
+          Fornecedores
+        </Typography>
+        <Card
           sx={{
-            marginBottom: '20px',
-            '& .MuiOutlinedInput-root': {
-              borderRadius: '25px',
-              borderColor: '#00509E',
-              '&:hover fieldset': {
-                borderColor: '#003b6e',
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: '#00509E',
-              },
-            },
+            padding: '20px',
+            bgcolor: 'white',
+            boxShadow: 3,
+            marginTop: '10px',
+            borderRadius: '25px',
           }}
-          InputProps={{
-            endAdornment: (
-              <IconButton sx={{ position: 'absolute', right: '10px' }}>
-                <SearchIcon />
-              </IconButton>
-            ),
-          }}
-        />
-
-        <Box sx={{ marginBottom: '20px' }}>
-          {Object.keys(filters).map((key) => (
-            <FormControlLabel
-              key={key}
-              control={
-                <Checkbox
-                  checked={filters[key]}
-                  onChange={handleFilterChange}
-                  name={key}
-                />
-              }
-              label={key.charAt(0).toUpperCase() + key.slice(1)}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '20px',
+            }}
+          >
+            <TextField
+              label="Pesquisar produto"
+              variant="outlined"
+              size="small"
+              value={search}
+              align="left"
+              onChange={(e) => setSearch(e.target.value)}
+              sx={{
+                width: '800px', // Aumenta a largura
+                height: '50px', // Aumenta a altura
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '25px', // Arredonda as bordas
+                  '& fieldset': {
+                    borderColor: '#00509E', // Cor das bordas
+                    borderWidth: '2px', // Espessura das bordas
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#00509E', // Cor ao passar o mouse
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#00509E', // Cor ao focar
+                  },
+                },
+              }}
             />
-          ))}
-        </Box>
-
-        <Card sx={{ padding: '20px', bgcolor: 'white', boxShadow: 3, marginTop: '60px' }}>
-          <TableContainer>
+            <Button
+              sx={{
+                backgroundColor: '#00509E',
+                color: 'white',
+                borderRadius: '30px',
+                padding: '8px 20px',
+                textTransform: 'none',
+                '&:hover': {
+                  backgroundColor: '#003b6e',
+                },
+              }}
+              onClick={handleNavigateToRegister}
+            >
+              Adicionar
+            </Button>
+          </Box>
+            <TableContainer sx={{ maxHeight: '1000px' }}>
             <Table>
               <TableHead>
                 <TableRow>
                   <TableCell><strong>Nome</strong></TableCell>
                   <TableCell><strong>Contato</strong></TableCell>
                   <TableCell><strong>Endereço</strong></TableCell>
-                  <TableCell><strong>Chave Pix </strong></TableCell>
+                  <TableCell><strong>Chave Pix</strong></TableCell>
+                  <TableCell>Ações</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -224,11 +198,10 @@ const FornecedoresPage = () => {
                         </IconButton>
                       </TableCell>
                     </TableRow>
-                ))}
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>
-
           <TablePagination
             component="div"
             count={filteredFornecedores.length}
