@@ -11,7 +11,7 @@ export default function FornecedoresCadastro() {
         contato: '',
         endereco: '',
         chavePix: '',
-        contratoUrl: '',
+        contrato: '',
     });
 
     const [loading, setLoading] = useState(false);
@@ -25,13 +25,39 @@ export default function FornecedoresCadastro() {
     // Função para criar um fornecedor na API
     const createFornecedora = async (values) => {
         try {
-            const response = await axios.post(BASE_URL, values); // Envia os dados para a API
+            const formData = new FormData();
+    
+            // Serializa o objeto fornecedora como JSON
+            formData.append("fornecedora", JSON.stringify({
+                nome: values.nome,
+                contato: values.contato,
+                endereco: values.endereco,
+                chavePix: values.chavePix,
+            }));
+    
+            // Adiciona o contrato ao FormData
+            // Aqui, você precisa capturar o arquivo no frontend
+            const contrato = document.querySelector('input[name="contrato"]')?.files[0];
+            if (contrato) {
+                formData.append("contrato", contrato);
+            } else {
+                throw new Error("O arquivo do contrato é obrigatório!");
+            }
+    
+            // Faz a requisição para o backend
+            const response = await axios.post(BASE_URL, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+    
             return response.data;
         } catch (error) {
-            console.error('Erro ao criar fornecedor:', error);
+            console.error("Erro ao criar fornecedor:", error);
             throw error;
         }
     };
+    
 
     // Envia os dados para a API
     const handleSubmit = async (event) => {
@@ -131,14 +157,14 @@ export default function FornecedoresCadastro() {
                                 </Grid>
                                 <Grid item md={6} xs={12}>
                                     <TextField
-                                        fullWidth
-                                        label="URL do Contrato"
-                                        name="contratoUrl"
-                                        onChange={handleChange}
-                                        value={newValues?.contratoUrl || ''}
+                                         fullWidth
+                                        type="file"
+                                        inputProps={{ accept: ".pdf,.doc,.docx" }}
+                                        name="contrato"
                                         variant="outlined"
-                                    />
+                                 />
                                 </Grid>
+
                             </Grid>
                         </CardContent>
 
