@@ -110,7 +110,7 @@ const FornecedoresPage = () => {
           marginLeft: '250px',
           maxHeight: '1000px',
           overflow: 'auto',
-          backgroundColor: '#E3F2FD', 
+          backgroundColor: '#9AE4FF', 
           paddingTop: '3rem', 
         }}
       >
