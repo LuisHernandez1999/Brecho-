@@ -45,28 +45,30 @@ const FornecedoresPage = () => {
 
   const deleteFornecedora = async (id, values) => {
     try {
-        const formData = new FormData();
-        formData.append("fornecedora", JSON.stringify({
-            id,
-            nome: values.nome,
-            contato: values.contato,
-            endereco: values.endereco,
-            chavePix: values.chavePix,
-        }));
-        const response = await axios.post(`${BASE_URL}/delete`, formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        });
-        console.log('Fornecedor deletado com sucesso:', response.data);
-        setFornecedores((prev) => prev.filter((fornecedora) => fornecedora.id !== id));
-        alert('Fornecedor deletado com sucesso!');
+      const formData = new FormData();
+      formData.append(
+        "fornecedora",
+        JSON.stringify({
+          id,
+          nome: values.nome,
+          contato: values.contato,
+          endereco: values.endereco,
+          chavePix: values.chavePix,
+        })
+      );
+      const response = await axios.post(`${BASE_URL}/delete`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log('Fornecedor deletado com sucesso:', response.data);
+      setFornecedores((prev) => prev.filter((fornecedora) => fornecedora.id !== id));
+      alert('Fornecedor deletado com sucesso!');
     } catch (error) {
-        console.error("Erro ao deletar fornecedor:", error);
-        alert('Erro ao deletar fornecedor.');
+      console.error("Erro ao deletar fornecedor:", error);
+      alert('Erro ao deletar fornecedor.');
     }
-};
-
+  };
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -100,80 +102,79 @@ const FornecedoresPage = () => {
   });
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', backgroundColor: '#blue', minHeight: '100vh' }}>
       <Sidebar />
       <Box
         sx={{
           flex: 1,
           marginLeft: '250px',
-          padding: '20px',
-          maxHeight: '1000px', 
+          maxHeight: '1000px',
           overflow: 'auto',
-          marginTop: '60px',
+          backgroundColor: '#E3F2FD', 
+          paddingTop: '3rem', 
         }}
       >
-        <Typography variant="h4" sx={{ marginBottom: '20px', fontWeight: 'bold' }}>
-          Fornecedores
-        </Typography>
+       <Typography
+                variant="h4"
+                sx={{
+                    textAlign: 'center',  
+                    fontWeight: 'bold',
+                    marginBottom: '50px',  
+                }}
+            >
+                Fornecedores
+            </Typography>
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginBottom: '30px',  
+                }}
+            >
+  <TextField
+    label="Pesquisar fornecedor"
+    variant="outlined"
+    size="small"
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    sx={{
+      width: '2000px', 
+      '& .MuiOutlinedInput-root': {
+        borderRadius: '25px',
+        backgroundColor: '#FFFFFF', 
+        color: '#000000', 
+        '& fieldset': {
+          borderColor: '#CCCCCC', 
+        },
+        '&:hover fieldset': {
+          borderColor: '#00509E',
+        },
+        '&.Mui-focused fieldset': {
+          borderColor: '#00509E', 
+        },
+      },
+      '& .MuiInputBase-input': {
+        color: '#000000', 
+      },
+      '& .MuiInputLabel-root': {
+        color: '#000000', 
+      },
+      '& .MuiInputLabel-root.Mui-focused': {
+        color: '#00509E', 
+      },
+    }}
+  />
+</Box>
         <Card
           sx={{
             padding: '20px',
             bgcolor: 'white',
             boxShadow: 3,
-            marginTop: '10px',
             borderRadius: '25px',
           }}
         >
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '20px',
-            }}
-          >
-            <TextField
-              label="Pesquisar produto"
-              variant="outlined"
-              size="small"
-              value={search}
-              align="left"
-              onChange={(e) => setSearch(e.target.value)}
-              sx={{
-                width: '800px', // Aumenta a largura
-                height: '50px', // Aumenta a altura
-                '& .MuiOutlinedInput-root': {
-                  borderRadius: '25px', // Arredonda as bordas
-                  '& fieldset': {
-                    borderColor: '#00509E', // Cor das bordas
-                    borderWidth: '2px', // Espessura das bordas
-                  },
-                  '&:hover fieldset': {
-                    borderColor: '#00509E', // Cor ao passar o mouse
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#00509E', // Cor ao focar
-                  },
-                },
-              }}
-            />
-            <Button
-              sx={{
-                backgroundColor: '#00509E',
-                color: 'white',
-                borderRadius: '30px',
-                padding: '8px 20px',
-                textTransform: 'none',
-                '&:hover': {
-                  backgroundColor: '#003b6e',
-                },
-              }}
-              onClick={handleNavigateToRegister}
-            >
-              Adicionar
-            </Button>
-          </Box>
-            <TableContainer sx={{ maxHeight: '1000px' }}>
+          <TableContainer sx={{ maxHeight: '1000px' }}>
             <Table>
               <TableHead>
                 <TableRow>
@@ -228,8 +229,31 @@ const FornecedoresPage = () => {
             rowsPerPageOptions={[5, 10, 25]}
           />
         </Card>
-      </Box>
-    </Box>
+        <Box
+  sx={{
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '20px',
+  }}
+>
+  <Button
+    sx={{
+      backgroundColor: '#FFDEEC',
+      color: 'black',
+      fontWeight: 'bold',
+      borderRadius: '60px',
+      padding: '10px 0',
+      width: '500px',
+      height: '50px', 
+      textTransform: 'none',
+    }}
+    onClick={handleNavigateToRegister}
+  >
+    Cadastrar fornecedor
+  </Button>
+</Box>
+  </Box>
+</Box>
   );
 };
 
