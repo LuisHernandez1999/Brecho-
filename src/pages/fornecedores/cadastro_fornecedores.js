@@ -83,14 +83,14 @@ export default function FornecedoresCadastro() {
     };
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex',   backgroundColor: '#9AE4FF', minHeight: '100vh'  }}>
             <Box sx={{ width: '250px' }}>
                 <Sidebar />
             </Box>
 
             <Box sx={{ flex: 1, p: 3 }}>
-                <Box sx={{ mb: 4, textAlign: 'left', mt: 8 }}>
-                    <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2 }}>
+                <Box sx={{ mb: 4, textAlign: 'center', mt: 8 }}>
+                    <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2, }}>
                         Cadastrar Fornecedor
                     </Typography>
                 </Box>
@@ -105,11 +105,11 @@ export default function FornecedoresCadastro() {
                             mx: 'auto',
                             mt: 8,
                             height: 'auto',
+                            backgroundColor: '#FFDEEC',
                         }}
                     >
                         <CardContent>
                             <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
-                                Informações Gerais
                             </Typography>
                             <Grid container spacing={3}>
                                 <Grid item md={6} xs={12}>
@@ -121,6 +121,15 @@ export default function FornecedoresCadastro() {
                                         required
                                         value={newValues?.nome || ''}
                                         variant="outlined"
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: 4, 
+                                                backgroundColor: '#FFFFFF', 
+                                            },
+                                            '& .MuiOutlinedInput-root.Mui-focused': {
+                                                backgroundColor: '#FFFFFF', 
+                                            },
+                                        }}
                                     />
                                 </Grid>
                                 <Grid item md={6} xs={12}>
@@ -132,6 +141,15 @@ export default function FornecedoresCadastro() {
                                         required
                                         value={newValues?.contato || ''}
                                         variant="outlined"
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: 4, 
+                                                backgroundColor: '#FFFFFF', 
+                                            },
+                                            '& .MuiOutlinedInput-root.Mui-focused': {
+                                                backgroundColor: '#FFFFFF', 
+                                            },
+                                        }}
                                     />
                                 </Grid>
                                 <Grid item md={6} xs={12}>
@@ -143,6 +161,15 @@ export default function FornecedoresCadastro() {
                                         required
                                         value={newValues?.endereco || ''}
                                         variant="outlined"
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: 4, 
+                                                backgroundColor: '#FFFFFF', 
+                                            },
+                                            '& .MuiOutlinedInput-root.Mui-focused': {
+                                                backgroundColor: '#FFFFFF', 
+                                            },
+                                        }}
                                     />
                                 </Grid>
                                 <Grid item md={6} xs={12}>
@@ -153,6 +180,15 @@ export default function FornecedoresCadastro() {
                                         onChange={handleChange}
                                         value={newValues?.chavePix || ''}
                                         variant="outlined"
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: 4, 
+                                                backgroundColor: '#FFFFFF', 
+                                            },
+                                            '& .MuiOutlinedInput-root.Mui-focused': {
+                                                backgroundColor: '#FFFFFF', 
+                                            },
+                                        }}
                                     />
                                 </Grid>
                                 <Grid item md={6} xs={12}>
@@ -162,35 +198,85 @@ export default function FornecedoresCadastro() {
                                         inputProps={{ accept: ".pdf,.doc,.docx" }}
                                         name="contrato"
                                         variant="outlined"
-                                 />
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: 4, 
+                                                backgroundColor: '#FFFFFF',
+                                            },
+                                            '& .MuiOutlinedInput-root.Mui-focused': {
+                                                backgroundColor: '#FFFFFF', 
+                                            },
+                                        }}
+                                    />
                                 </Grid>
 
                             </Grid>
                         </CardContent>
 
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 2 }}>
-                            <Button
-                                type="submit"
-                                disabled={loading}
-                                sx={{
-                                    mt: 2,
-                                    color: '#00509E',
-                                    backgroundColor: 'transparent',
-                                    textTransform: 'none',
-                                    fontSize: '18px',
-                                    '&:hover': {
-                                        color: '#003B6F',
-                                        backgroundColor: 'transparent',
-                                    },
-                                }}
-                            >
-                                {loading ? (
-                                    <CircularProgress size={24} sx={{ marginRight: 2 }} />
-                                ) : (
-                                    'Salvar'
-                                )}
-                            </Button>
-                        </Box>
+                        <Box 
+    sx={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        gap: 2,  
+        mt: 2 
+    }}
+>
+    
+    <Button
+        type="submit"
+        disabled={loading}
+        sx={{
+            color: '#000000',
+            backgroundColor: '#9AE4FF', 
+            textTransform: 'none',
+            fontSize: '18px',
+            fontWeight: 'bold', 
+            borderRadius: '50px', 
+            padding: '10px 30px', 
+            '&:hover': {
+                backgroundColor: '#003B6F', 
+            },
+            '&:disabled': {
+                backgroundColor: '#cccccc', 
+                color: '#666666',
+            },
+        }}
+    >
+        {loading ? (
+            <CircularProgress size={24} sx={{ color: '#FFFFFF', marginRight: 2 }} />
+        ) : (
+            'Cadastrar Fornecedor'
+        )}
+    </Button>
+
+    
+    <Button
+        type="submit"
+        disabled={loading}
+        sx={{
+            color: '#000000', 
+            backgroundColor: '#9AE4FF', 
+            textTransform: 'none',
+            fontSize: '18px',
+            fontWeight: 'bold', 
+            borderRadius: '50px', 
+            padding: '10px 30px', 
+            '&:hover': {
+                backgroundColor: '#003B6F', 
+            },
+            '&:disabled': {
+                backgroundColor: '#cccccc', 
+                color: '#666666',
+            },
+        }}
+    >
+        {loading ? (
+            <CircularProgress size={24} sx={{ color: '#FFFFFF', marginRight: 2 }} />
+        ) : (
+            'Cadastrar Produto'
+        )}
+    </Button>
+</Box>
                     </Card>
                 </form>
             </Box>
