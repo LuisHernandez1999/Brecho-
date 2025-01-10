@@ -83,13 +83,13 @@ export default function FornecedoresCadastro() {
     };
 
     return (
-        <Box sx={{ display: 'flex',   backgroundColor: '#9AE4FF', minHeight: '100vh'  }}>
+        <Box sx={{ display: 'flex',   backgroundColor: 'white', minHeight: '100vh'  }}>
             <Box sx={{ width: '250px' }}>
                 <Sidebar />
             </Box>
 
             <Box sx={{ flex: 1, p: 3 }}>
-                <Box sx={{ mb: 4, textAlign: 'center', mt: 8 }}>
+                <Box sx={{ mb: 4, textAlign: 'center', mt: 8, marginRight:'800px'}}>
                     <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2, }}>
                         Cadastrar Fornecedor
                     </Typography>
@@ -105,7 +105,7 @@ export default function FornecedoresCadastro() {
                             mx: 'auto',
                             mt: 8,
                             height: 'auto',
-                            backgroundColor: '#FFDEEC',
+                            backgroundColor: 'white',
                         }}
                     >
                         <CardContent>
@@ -226,11 +226,11 @@ export default function FornecedoresCadastro() {
         type="submit"
         disabled={loading}
         sx={{
-            color: '#000000',
-            backgroundColor: '#9AE4FF', 
+            color: 'white',
+            backgroundColor: '#50abe4', 
             textTransform: 'none',
-            fontSize: '18px',
-            fontWeight: 'bold', 
+            border: '2px solid #00509E', 
+            fontSize: '15px',
             borderRadius: '50px', 
             padding: '10px 30px', 
             '&:hover': {
@@ -246,34 +246,6 @@ export default function FornecedoresCadastro() {
             <CircularProgress size={24} sx={{ color: '#FFFFFF', marginRight: 2 }} />
         ) : (
             'Cadastrar Fornecedor'
-        )}
-    </Button>
-
-    
-    <Button
-        type="submit"
-        disabled={loading}
-        sx={{
-            color: '#000000', 
-            backgroundColor: '#9AE4FF', 
-            textTransform: 'none',
-            fontSize: '18px',
-            fontWeight: 'bold', 
-            borderRadius: '50px', 
-            padding: '10px 30px', 
-            '&:hover': {
-                backgroundColor: '#003B6F', 
-            },
-            '&:disabled': {
-                backgroundColor: '#cccccc', 
-                color: '#666666',
-            },
-        }}
-    >
-        {loading ? (
-            <CircularProgress size={24} sx={{ color: '#FFFFFF', marginRight: 2 }} />
-        ) : (
-            'Cadastrar Produto'
         )}
     </Button>
 </Box>

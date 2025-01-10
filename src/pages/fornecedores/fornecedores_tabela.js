@@ -110,71 +110,96 @@ const FornecedoresPage = () => {
           marginLeft: '250px',
           maxHeight: '1000px',
           overflow: 'auto',
-          backgroundColor: '#9AE4FF', 
+          backgroundColor: 'white', 
           paddingTop: '3rem', 
         }}
       >
-       <Typography
-                variant="h4"
-                sx={{
-                    textAlign: 'center',  
-                    fontWeight: 'bold',
-                    marginBottom: '50px',  
-                }}
-            >
-                Fornecedores
-            </Typography>
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: '30px',  
-                }}
-            >
-  <TextField
-    label="Pesquisar fornecedor"
-    variant="outlined"
-    size="small"
-    value={search}
-    onChange={(e) => setSearch(e.target.value)}
-    sx={{
-      width: '2000px', 
-      '& .MuiOutlinedInput-root': {
-        borderRadius: '25px',
-        backgroundColor: '#FFFFFF', 
-        color: '#000000', 
-        '& fieldset': {
-          borderColor: '#CCCCCC', 
-        },
-        '&:hover fieldset': {
-          borderColor: '#00509E',
-        },
-        '&.Mui-focused fieldset': {
-          borderColor: '#00509E', 
-        },
-      },
-      '& .MuiInputBase-input': {
-        color: '#000000', 
-      },
-      '& .MuiInputLabel-root': {
-        color: '#000000', 
-      },
-      '& .MuiInputLabel-root.Mui-focused': {
-        color: '#00509E', 
-      },
-    }}
-  />
-</Box>
+        <Typography
+          variant="h4"
+          sx={{
+            textAlign: 'center',  
+            fontWeight: 'bold',
+            marginBottom: '50px',
+            marginRight:'1000px',  
+          }}
+        >
+          Fornecedores
+        </Typography>
+        
+       
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: '30px',  
+          }}
+        >
+          <TextField
+            label="Pesquisar fornecedor"
+            variant="outlined"
+            size="small"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            sx={{
+              height:'50px',
+              width: '500px', 
+              marginRight: '300px',  
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '25px',
+                backgroundColor: '#FFFFFF', 
+                color: '#000000', 
+                '& fieldset': {
+                  borderColor: '#CCCCCC', 
+                },
+                '&:hover fieldset': {
+                  borderColor: '#00509E',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#00509E', 
+                },
+              },
+              '& .MuiInputBase-input': {
+                color: '#000000', 
+              },
+              '& .MuiInputLabel-root': {
+                color: '#000000', 
+              },
+              '& .MuiInputLabel-root.Mui-focused': {
+                color: '#00509E', 
+              },
+            }}
+          />
+         <Button
+  sx={{
+    backgroundColor: '#50abe4',
+    color: 'white',
+    border: '2px solid #00509E', 
+    fontWeight: 'tine',
+    fontSize: '15px',
+    borderRadius: '60px',
+    padding: '10px 0',
+    width: '200px', 
+    height: '50px',
+    textTransform: 'none',
+  }}
+  onClick={handleNavigateToRegister}
+>
+  Cadastrar fornecedor
+</Button>
+        </Box>
+
         <Card
           sx={{
             padding: '20px',
             bgcolor: 'white',
             boxShadow: 3,
             borderRadius: '25px',
+            width: '80%',  
+            margin: '0 auto', 
           }}
         >
-          <TableContainer sx={{ maxHeight: '1000px' }}>
+          <TableContainer sx={{ maxHeight: '1000px', width: '100%', margin: '0 auto' }}>
             <Table>
               <TableHead>
                 <TableRow>
@@ -229,31 +254,8 @@ const FornecedoresPage = () => {
             rowsPerPageOptions={[5, 10, 25]}
           />
         </Card>
-        <Box
-  sx={{
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: '20px',
-  }}
->
-  <Button
-    sx={{
-      backgroundColor: '#FFDEEC',
-      color: 'black',
-      fontWeight: 'bold',
-      borderRadius: '60px',
-      padding: '10px 0',
-      width: '500px',
-      height: '50px', 
-      textTransform: 'none',
-    }}
-    onClick={handleNavigateToRegister}
-  >
-    Cadastrar fornecedor
-  </Button>
-</Box>
-  </Box>
-</Box>
+      </Box>
+    </Box>
   );
 };
 
