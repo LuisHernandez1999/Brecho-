@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Box, Button, Card, CardContent, TextField, Typography, Grid, CircularProgress } from '@mui/material';
+import { Box, Button, Card, CardContent, TextField, Typography, Grid, CircularProgress, IconButton } from '@mui/material';
 import Sidebar from '../../components/sidebar';
 import axios from 'axios';
-
+import AttachFileIcon from '@mui/icons-material/AttachFile'; // Novo ícone para o botão de upload
 const BASE_URL = 'http://localhost:8080/api/fornecedoras'; // URL base da API
 
 export default function FornecedoresCadastro() {
@@ -57,7 +57,6 @@ export default function FornecedoresCadastro() {
             throw error;
         }
     };
-    
 
     // Envia os dados para a API
     const handleSubmit = async (event) => {
@@ -82,30 +81,33 @@ export default function FornecedoresCadastro() {
         }
     };
 
+    
     return (
-        <Box sx={{ display: 'flex',   backgroundColor: 'white', minHeight: '100vh'  }}>
+        <Box sx={{ display: 'flex', backgroundColor: '#F0E1D2', minHeight: '100vh' }}>
             <Box sx={{ width: '250px' }}>
                 <Sidebar />
             </Box>
 
             <Box sx={{ flex: 1, p: 3 }}>
-                <Box sx={{ mb: 4, textAlign: 'center', mt: 8, marginRight:'800px'}}>
-                    <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2, }}>
+                <Box sx={{ mb: 4, textAlign: 'center', mt: 8, marginRight:'800px' }}>
+                    <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2 }}>
                         Cadastrar Fornecedor
                     </Typography>
                 </Box>
+        
 
                 <form autoComplete="off" onSubmit={handleSubmit}>
                     <Card
                         sx={{
                             borderRadius: 4,
-                            boxShadow: 3,
+                            
                             p: 3,
                             maxWidth: '100%',
                             mx: 'auto',
                             mt: 8,
                             height: 'auto',
                             backgroundColor: 'white',
+                            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
                         }}
                     >
                         <CardContent>
@@ -123,11 +125,11 @@ export default function FornecedoresCadastro() {
                                         variant="outlined"
                                         sx={{
                                             '& .MuiOutlinedInput-root': {
-                                                borderRadius: 4, 
-                                                backgroundColor: '#FFFFFF', 
+                                                borderRadius: 4,
+                                                backgroundColor: '#FFFFFF',
                                             },
                                             '& .MuiOutlinedInput-root.Mui-focused': {
-                                                backgroundColor: '#FFFFFF', 
+                                                backgroundColor: '#FFFFFF',
                                             },
                                         }}
                                     />
@@ -143,11 +145,11 @@ export default function FornecedoresCadastro() {
                                         variant="outlined"
                                         sx={{
                                             '& .MuiOutlinedInput-root': {
-                                                borderRadius: 4, 
-                                                backgroundColor: '#FFFFFF', 
+                                                borderRadius: 4,
+                                                backgroundColor: '#FFFFFF',
                                             },
                                             '& .MuiOutlinedInput-root.Mui-focused': {
-                                                backgroundColor: '#FFFFFF', 
+                                                backgroundColor: '#FFFFFF',
                                             },
                                         }}
                                     />
@@ -163,11 +165,11 @@ export default function FornecedoresCadastro() {
                                         variant="outlined"
                                         sx={{
                                             '& .MuiOutlinedInput-root': {
-                                                borderRadius: 4, 
-                                                backgroundColor: '#FFFFFF', 
+                                                borderRadius: 4,
+                                                backgroundColor: '#FFFFFF',
                                             },
                                             '& .MuiOutlinedInput-root.Mui-focused': {
-                                                backgroundColor: '#FFFFFF', 
+                                                backgroundColor: '#FFFFFF',
                                             },
                                         }}
                                     />
@@ -182,73 +184,80 @@ export default function FornecedoresCadastro() {
                                         variant="outlined"
                                         sx={{
                                             '& .MuiOutlinedInput-root': {
-                                                borderRadius: 4, 
-                                                backgroundColor: '#FFFFFF', 
+                                                borderRadius: 4,
+                                                backgroundColor: '#FFFFFF',
                                             },
                                             '& .MuiOutlinedInput-root.Mui-focused': {
-                                                backgroundColor: '#FFFFFF', 
+                                                backgroundColor: '#FFFFFF',
                                             },
                                         }}
                                     />
                                 </Grid>
                                 <Grid item md={6} xs={12}>
-                                    <TextField
-                                         fullWidth
-                                        type="file"
-                                        inputProps={{ accept: ".pdf,.doc,.docx" }}
-                                        name="contrato"
-                                        variant="outlined"
-                                        sx={{
-                                            '& .MuiOutlinedInput-root': {
-                                                borderRadius: 4, 
-                                                backgroundColor: '#FFFFFF',
-                                            },
-                                            '& .MuiOutlinedInput-root.Mui-focused': {
-                                                backgroundColor: '#FFFFFF', 
-                                            },
-                                        }}
-                                    />
-                                </Grid>
-
-                            </Grid>
+                                <input
+                                type="file"
+                                name="contrato"
+                                accept=".pdf,.doc,.docx"
+                                style={{ display: 'none' }}
+                               id="upload-contrato"
+                               onChange={handleChange}
+                                   />
+           <label htmlFor="upload-contrato" style={{ display: 'flex', alignItems: 'center' }}>
+                  <IconButton
+                     component="span"
+                     sx={{
+                      borderRadius: '50%',
+                      padding: '10px',
+                      color: 'black',
+                      '&:hover': {
+                     backgroundColor: 'white',
+                       },
+                      }}
+                       >
+                     <AttachFileIcon sx={{ fontSize: 30 }} />
+                     </IconButton>
+            <Typography variant="h6" sx={{ ml: 2, fontWeight: 'bold', fontSize: '18px', color: '#333', }}>
+                Adicionar Contrato
+           </Typography>
+               </label>
+                </Grid>
+                  </Grid>
                         </CardContent>
 
-                        <Box 
-    sx={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        gap: 2,  
-        mt: 2 
-    }}
->
-    
-    <Button
-        type="submit"
-        disabled={loading}
-        sx={{
-            color: 'white',
-            backgroundColor: '#50abe4', 
-            textTransform: 'none',
-            border: '2px solid #00509E', 
-            fontSize: '15px',
-            borderRadius: '50px', 
-            padding: '10px 30px', 
-            '&:hover': {
-                backgroundColor: '#003B6F', 
-            },
-            '&:disabled': {
-                backgroundColor: '#cccccc', 
-                color: '#666666',
-            },
-        }}
-    >
-        {loading ? (
-            <CircularProgress size={24} sx={{ color: '#FFFFFF', marginRight: 2 }} />
-        ) : (
-            'Cadastrar Fornecedor'
-        )}
-    </Button>
-</Box>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                gap: 2,
+                                mt: 2,
+                            }}
+                        >
+                            <Button
+                                type="submit"
+                                disabled={loading}
+                                sx={{
+                                    color: 'white',
+                                    backgroundColor: '#50abe4',
+                                    textTransform: 'none',
+                                    fontSize: '15px',
+                                    borderRadius: '50px',
+                                    padding: '10px 30px',
+                                    '&:hover': {
+                                        backgroundColor: '#003B6F',
+                                    },
+                                    '&:disabled': {
+                                        backgroundColor: '#cccccc',
+                                        color: '#666666',
+                                    },
+                                }}
+                            >
+                                {loading ? (
+                                    <CircularProgress size={24} sx={{ color: '#FFFFFF', marginRight: 2, boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', }} />
+                                ) : (
+                                    'Salvar Fornecedor'
+                                )}
+                            </Button>
+                        </Box>
                     </Card>
                 </form>
             </Box>

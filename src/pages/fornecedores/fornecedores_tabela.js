@@ -13,13 +13,18 @@ import {
   TextField,
   Button,
   TablePagination,
+  InputAdornment,
 } from '@mui/material';
 import Sidebar from '../../components/sidebar';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import * as XLSX from 'xlsx'; 
+import SearchIcon from '@mui/icons-material/Search';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 
 const BASE_URL = 'http://localhost:8080/api/fornecedoras';
 
@@ -97,96 +102,168 @@ const FornecedoresPage = () => {
     setPage(0);
   };
 
+ 
+
+  const handleExportToExcel = () => {
+   
+    console.log('Exportando fornecedores:', fornecedores);
+  
+    
+    const headers = ['Nome', 'Contato', 'Endereço', 'Chave Pix'];
+  
+    
+    const dataForExport = fornecedores.length > 0
+      ? fornecedores.map((fornecedora) => ({
+          Nome: fornecedora.nome || 'N/A',
+          Contato: fornecedora.contato || 'N/A',
+          Endereço: fornecedora.endereco || 'N/A',
+          'Chave Pix': fornecedora.chavePix || 'N/A',
+        }))
+      : [{ Nome: 'N/A', Contato: 'N/A', Endereço: 'N/A', 'Chave Pix': 'N/A' }]; 
+  
+ 
+    const sheetData = [headers, ...dataForExport.map(item => Object.values(item))];
+  
+    // Criar a planilha a partir de um Array of Arrays (aoa)
+    const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
+  
+    // Criar o workbook
+    const workbook = XLSX.utils.book_new();
+  
+    // Adicionar a planilha ao livro
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Fornecedores');
+  
+  
+    XLSX.writeFile(workbook, 'fornecedores.xlsx');
+  };
   const filteredFornecedores = fornecedores.filter((fornecedora) => {
     return fornecedora.nome.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
   return (
-    <Box sx={{ display: 'flex', backgroundColor: '#blue', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', backgroundColor: '#blue', minHeight: '100vh',backgroundColor: '#F0E1D2'  }}>
       <Sidebar />
       <Box
         sx={{
           flex: 1,
-          marginLeft: '250px',
+          marginLeft: '290px',
           maxHeight: '1000px',
           overflow: 'auto',
-          backgroundColor: 'white', 
-          paddingTop: '3rem', 
+          backgroundColor: '#F0E1D2',
+          paddingTop: '3rem',
         }}
       >
-        <Typography
-          variant="h4"
+        <Box
           sx={{
-            textAlign: 'center',  
-            fontWeight: 'bold',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between', 
             marginBottom: '50px',
-            marginRight:'1000px',  
           }}
         >
-          Fornecedores
-        </Typography>
-        
-       
+          <Typography
+            variant="h4"
+            sx={{
+              textAlign: 'center',
+              fontWeight: 'bold',
+            }}
+          >
+            Fornecedores
+          </Typography>
+          <Button
+            sx={{
+
+              color: 'black',
+            
+              borderRadius: '25px',
+              padding: '10px 20px',
+              textTransform: 'none',
+              
+              display: 'flex',
+              alignItems: 'center',
+              marginRight: '140px',
+              width:'180px',
+              '&:hover': {
+                backgroundColor: ' #50abe4', 
+              },
+            }}
+            onClick={handleExportToExcel}
+          >
+            <FileDownloadOutlinedIcon sx={{ marginRight: '8px' }} />
+            Exportar Excel
+          </Button>
+        </Box>
+
         <Box
           sx={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            marginBottom: '30px',  
+            marginBottom: '30px',
           }}
         >
+          
           <TextField
-            label="Pesquisar fornecedor"
-            variant="outlined"
-            size="small"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+        label="Pesquisar fornecedor"
+        variant="outlined"
+        size="medium"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        sx={{
+          height: '50px',
+          width: '500px',
+          marginRight: '300px',
+          '& .MuiOutlinedInput-root': {
+            borderRadius: '25px',
+            backgroundColor: '#FFFFFF',
+            color: '#000000',
+            '& fieldset': {
+              borderColor: '#CCCCCC',
+            },
+            '&:hover fieldset': {
+              borderColor: '#00509E',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#00509E',
+            },
+            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+          },
+          '& .MuiInputBase-input': {
+            color: '#000000',
+          },
+          '& .MuiInputLabel-root': {
+            color: '#000000',
+          },
+          '& .MuiInputLabel-root.Mui-focused': {
+            color: '#00509E',
+          },
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <SearchOutlinedIcon sx={{ color: '#00509E' }} /> {/* Novo ícone de pesquisa */}
+            </InputAdornment>
+          ),
+        }}
+      />
+          <Button
             sx={{
-              height:'50px',
-              width: '500px', 
-              marginRight: '300px',  
-              '& .MuiOutlinedInput-root': {
-                borderRadius: '25px',
-                backgroundColor: '#FFFFFF', 
-                color: '#000000', 
-                '& fieldset': {
-                  borderColor: '#CCCCCC', 
-                },
-                '&:hover fieldset': {
-                  borderColor: '#00509E',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#00509E', 
-                },
-              },
-              '& .MuiInputBase-input': {
-                color: '#000000', 
-              },
-              '& .MuiInputLabel-root': {
-                color: '#000000', 
-              },
-              '& .MuiInputLabel-root.Mui-focused': {
-                color: '#00509E', 
-              },
+              backgroundColor: '#50abe4',
+              color: 'white',
+              boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+              border: '2px solid #50abe4',
+              fontWeight: 'tine',
+              fontSize: '15px',
+              borderRadius: '60px',
+              padding: '10px 0',
+              width: '190px',
+              height: '50px',
+              textTransform: 'none',
             }}
-          />
-         <Button
-  sx={{
-    backgroundColor: '#50abe4',
-    color: 'white',
-    border: '2px solid #00509E', 
-    fontWeight: 'tine',
-    fontSize: '15px',
-    borderRadius: '60px',
-    padding: '10px 0',
-    width: '200px', 
-    height: '50px',
-    textTransform: 'none',
-  }}
-  onClick={handleNavigateToRegister}
->
-  Cadastrar fornecedor
-</Button>
+            onClick={handleNavigateToRegister}
+          >
+            Cadastrar fornecedor
+          </Button>
         </Box>
 
         <Card
@@ -195,18 +272,29 @@ const FornecedoresPage = () => {
             bgcolor: 'white',
             boxShadow: 3,
             borderRadius: '25px',
-            width: '80%',  
-            margin: '0 auto', 
+            width: '80%',
+            margin: '0 auto',
+            border: "'2px solid #B0B0B0'",
           }}
         >
-          <TableContainer sx={{ maxHeight: '1000px', width: '100%', margin: '0 auto' }}>
+          <TableContainer
+            sx={{ maxHeight: '1000px', width: '100%', margin: '0 auto' }}
+          >
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell><strong>Nome</strong></TableCell>
-                  <TableCell><strong>Contato</strong></TableCell>
-                  <TableCell><strong>Endereço</strong></TableCell>
-                  <TableCell><strong>Chave Pix</strong></TableCell>
+                  <TableCell>
+                    <strong>Nome</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Contato</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Endereço</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Chave Pix</strong>
+                  </TableCell>
                   <TableCell>Ações</TableCell>
                 </TableRow>
               </TableHead>

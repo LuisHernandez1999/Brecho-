@@ -63,7 +63,7 @@ export default function Sidebar() {
                     sx={{
                         marginBottom: '1rem',
                         paddingLeft: '1rem',
-                        '&:hover': { backgroundColor: '#003D73' },
+                        
                     }}
                     onClick={() => handleNavigation('../../fornecedores/fornecedores_tabela')}
                 >
@@ -78,7 +78,7 @@ export default function Sidebar() {
                     sx={{
                         marginBottom: '1rem',
                         paddingLeft: '1rem',
-                        '&:hover': { backgroundColor: '#003D73' },
+                      
                     }}
                     onClick={() => handleNavigation('../../estoque/estoque_tabela')}
                 >
@@ -93,7 +93,7 @@ export default function Sidebar() {
                     sx={{
                         marginBottom: '1rem',
                         paddingLeft: '1rem',
-                        '&:hover': { backgroundColor: '#003D73' },
+                       
                     }}
                     onClick={() => handleNavigation('/Caixa')}
                 >
