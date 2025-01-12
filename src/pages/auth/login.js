@@ -100,67 +100,64 @@ const ResetPassword = () => {
         zIndex: 1,
         backdropFilter: 'blur(10px)', 
     }}
->
-                    <Box sx={{ marginBottom: '1rem', marginTop: '-1rem' }}>
-                        <img src="/imagens/logodefiniti.png" alt="Logo" style={{ width: '120px' }} />
-                    </Box>
-                    <Typography
-                        variant="h1"
-                        sx={{
-                            fontSize: '1.7rem',
-                            marginBottom: '1.5rem',
-                            color: '#000',
-                            marginTop: '1.5rem',
-                            fontFamily: "'Plus Jakarta Sans', sans-serif",
-                            fontWeight: 'bold',
-                        }}
-                    >
-                        Brechó da Jujuba
-                    </Typography>
-                    <Typography
+><Box sx={{ marginBottom: '0.2rem' }}> {/* Reduzi o marginBottom para aproximar */}
+    <img src="/imagens/bbdefin.png" alt="Logo" style={{ width: '280px' }} />
+</Box>
+<Typography
     variant="h1"
     sx={{
-        fontSize: '0.8rem', 
-        marginBottom: '1.5rem',
+        padding: '0.3rem 1rem', // Reduzi o padding para aproximar
+        fontSize: '1.7rem',
+        marginBottom: '0.5rem', // Margem inferior menor
         color: '#000',
-        marginTop: '1.5rem',
         fontFamily: "'Plus Jakarta Sans', sans-serif",
-        fontWeight: 'normal', 
+        fontWeight: 'bold',
+    }}
+>
+    Brechó da Jujuba
+</Typography>
+<Typography
+    variant="h1"
+    sx={{
+        fontSize: '0.8rem',
+        marginBottom: '0.8rem', // Margem inferior reduzida
+        color: '#000',
+        marginTop: '0.3rem', // Margem superior reduzida
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
+        fontWeight: 'normal',
     }}
 >
     Clique em entrar para começar
 </Typography>
 <form onSubmit={handleSubmit}>
-      <Box
+    <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            marginTop: '0.5rem', // Pequeno espaçamento entre o texto e o botão
         }}
-      >
+    >
         <Button
-          type="submit"
-          sx={{
-            width: 'auto',
-            maxWidth: 'auto',
-            padding: 0,
-            backgroundColor: 'transparent',
-            color: '#00509E',
-            border: 'none',
-            borderRadius: 0,
-            fontSize: '0.9375rem',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            '&:hover': {
-              backgroundColor: 'transparent',
-              color: '#003d6a',
-            },
-          }}
+            type="submit"
+            sx={{
+                width: 'auto',
+                maxWidth: 'auto',
+                padding: '0.5rem 1rem', // Botão um pouco maior
+                color: '#00509E',
+                borderRadius: '8px',
+                fontSize: '0.9375rem',
+                fontWeight: 'bold',
+                textTransform: 'none',
+                '&:hover': {
+                    backgroundColor: '#003d6a',
+                },
+            }}
         >
-          Entrar
+            Entrar
         </Button>
-      </Box>
-    </form>
+    </Box>
+</form>
                         {formik.errors.submit && (
                             <Typography
                                 color="error"

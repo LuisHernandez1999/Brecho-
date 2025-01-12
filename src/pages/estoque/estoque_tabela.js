@@ -86,7 +86,7 @@ const EstoquePage = () => {
   );
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex',backgroundColor: '#F0E1D2',minHeight: '100vh'  }}>
       <Sidebar />
       <Box
         sx={{

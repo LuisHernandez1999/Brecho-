@@ -70,7 +70,7 @@ export default function ProdutosCadastro() {
     };
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex',backgroundColor: '#F0E1D2',minHeight: '100vh' }}>
             <Box sx={{ width: '250px' }}>
                 <Sidebar />
             </Box>
@@ -92,6 +92,7 @@ export default function ProdutosCadastro() {
                             mx: 'auto',
                             mt: 8,
                             height: 'auto',
+                            
                         }}
                     >
                         <CardContent>
@@ -129,6 +130,15 @@ export default function ProdutosCadastro() {
                                         required
                                         value={newValues?.nome || ''}
                                         variant="outlined"
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: 4,
+                                                backgroundColor: '#FFFFFF',
+                                            },
+                                            '& .MuiOutlinedInput-root.Mui-focused': {
+                                                backgroundColor: '#FFFFFF',
+                                            },
+                                        }}
                                     />
                                 </Grid>
                                 <Grid item md={6} xs={12}>
@@ -140,6 +150,15 @@ export default function ProdutosCadastro() {
                                         required
                                         value={newValues?.quantidade || ''}
                                         variant="outlined"
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: 4,
+                                                backgroundColor: '#FFFFFF',
+                                            },
+                                            '& .MuiOutlinedInput-root.Mui-focused': {
+                                                backgroundColor: '#FFFFFF',
+                                            },
+                                        }}
                                     />
                                 </Grid>
                                 <Grid item md={6} xs={12}>
@@ -151,6 +170,15 @@ export default function ProdutosCadastro() {
                                         required
                                         value={newValues?.precoUnidade || ''}
                                         variant="outlined"
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: 4,
+                                                backgroundColor: '#FFFFFF',
+                                            },
+                                            '& .MuiOutlinedInput-root.Mui-focused': {
+                                                backgroundColor: '#FFFFFF',
+                                            },
+                                        }}
                                     />
                                 </Grid>
                                 <Grid item md={6} xs={12}>
@@ -162,31 +190,49 @@ export default function ProdutosCadastro() {
                                         required
                                         value={newValues?.valorTotal || ''}
                                         variant="outlined"
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: 4,
+                                                backgroundColor: '#FFFFFF',
+                                            },
+                                            '& .MuiOutlinedInput-root.Mui-focused': {
+                                                backgroundColor: '#FFFFFF',
+                                            },
+                                        }}
                                     />
                                 </Grid>
                             </Grid>
                         </CardContent>
 
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 2 }}>
+                        <Box  sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                gap: 2,
+                                mt: 2,
+                            }}>
                             <Button
                                 type="submit"
                                 disabled={loading}
                                 sx={{
-                                    mt: 2,
-                                    color: '#00509E',
-                                    backgroundColor: 'transparent',
+                                    color: 'white',
+                                    backgroundColor: '#50abe4',
                                     textTransform: 'none',
-                                    fontSize: '18px',
+                                    fontSize: '15px',
+                                    borderRadius: '50px',
+                                    padding: '10px 30px',
                                     '&:hover': {
-                                        color: '#003B6F',
-                                        backgroundColor: 'transparent',
+                                        backgroundColor: '#003B6F',
+                                    },
+                                    '&:disabled': {
+                                        backgroundColor: '#cccccc',
+                                        color: '#666666',
                                     },
                                 }}
                             >
                                 {loading ? (
                                     <CircularProgress size={24} sx={{ marginRight: 2 }} />
                                 ) : (
-                                    'Salvar'
+                                    'Salvar produto'
                                 )}
                             </Button>
                         </Box>
