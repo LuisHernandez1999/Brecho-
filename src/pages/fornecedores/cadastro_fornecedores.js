@@ -31,6 +31,7 @@ export default function FornecedoresCadastro() {
             formData.append("fornecedora", JSON.stringify({
                 nome: values.nome,
                 contato: values.contato,
+                contrato: values.contratoUrl,
                 endereco: values.endereco,
                 chavePix: values.chavePix,
             }));
